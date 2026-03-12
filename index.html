@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="RTCN — Coming Soon. Connecting the Thai Roblox community.">
+    <title>RTCN | Coming Soon</title>
+    
+    <!-- DM Sans Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #09090b;
+            --fg: #fafafa;
+            --fg-muted: #a1a1aa;
+            --fg-dim: #71717a;
+            --border: #ffffff14;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Subtle Grain Effect Overlay */
+        body::after {
+            content: "";
+            pointer-events: none;
+            opacity: 0.035;
+            z-index: 9999;
+            background-image: url("https://private-user-images.githubusercontent.com/58628602/562499378-1327b6c3-4e8a-46c7-ada6-deaf025f4e31.jpg?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzMzNTA1NTIsIm5iZiI6MTc3MzM1MDI1MiwicGF0aCI6Ii81ODYyODYwMi81NjI0OTkzNzgtMTMyN2I2YzMtNGU4YS00NmM3LWFkYTYtZGVhZjAyNWY0ZTMxLmpwZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAzMTIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMzEyVDIxMTczMlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTZhNzljM2MxMmEwODI1MWVhOTE1MDFlMTczYThhNWU1N2M0ZGRhMTZjMDI1MWNkOWRhNDM5OTJmYzU5N2RlMTcmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.tZSI64T6Bf224NluCAUSHw9wtGrICjKr-LKADyTFvU8");
+            background-repeat: repeat;
+            background-size: 256px 256px;
+            position: fixed;
+            inset: 0;
+        }
+
+        /* Navigation */
+        .nav {
+            padding: 1.5rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0.6;
+            transition: opacity 0.4s;
+        }
+
+        .nav:hover {
+            opacity: 1;
+        }
+
+        .nav-brand svg {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+            color: var(--fg-muted);
+        }
+
+        .nav-links a:hover {
+            color: var(--fg);
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 12vh;
+            text-align: center;
+        }
+
+        .tagline {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 500;
+            letter-spacing: -0.035em;
+            line-height: 1.15;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .coming-soon-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1.25rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--fg-muted);
+            margin-bottom: 6vh;
+            animation: fadeIn 1s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        /* Mock App UI Container */
+        .preview-container {
+            width: min(95vw, 1200px);
+            margin: 0 auto;
+            position: relative;
+            animation: slideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .mock-window {
+            background: #111113;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            aspect-ratio: 16 / 10;
+            width: 100%;
+            box-shadow: 0 40px 100px -20px rgba(0,0,0,0.5);
+            overflow: hidden;
+            position: relative;
+            mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+        }
+
+        /* Mock Editor UI Elements */
+        .window-header {
+            height: 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            gap: 8px;
+        }
+
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot.red { background: #ff5f57; }
+        .dot.yellow { background: #febc2e; }
+        .dot.green { background: #28c840; }
+
+        .mock-content {
+            padding: 2rem;
+            display: flex;
+            gap: 2rem;
+            height: calc(100% - 40px);
+        }
+
+        .sidebar { width: 180px; display: flex; flex-direction: column; gap: 12px; }
+        .line { height: 8px; background: rgba(255,255,255,0.05); border-radius: 4px; }
+        .line.short { width: 60%; }
+        .line.long { width: 90%; }
+
+        .editor-area { flex: 1; display: flex; flex-direction: column; gap: 1rem; }
+        .chat-bubble {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: 8px;
+            width: 80%;
+        }
+
+        /* Footer */
+        footer {
+            padding: 2rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--fg-dim);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--fg);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @media (max-width: 640px) {
+            .nav, footer { padding: 1.25rem; }
+            .tagline { padding: 0 1rem; }
+            .sidebar { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-brand">
+            <!-- T3 Logo Replacement -->
+            <img src="https://avatars.githubusercontent.com/u/267692766?s=200&v=4">
+        </div>
+        <div class="nav-links">
+            <a href="https://www.facebook.com/RobloxThailandCommunity" target="_blank">Facebook</a>
+        </div>
+    </nav>
+
+    <main>
+        <h1 class="tagline">Connecting the Thai Roblox community.</h1>
+        
+        <div class="coming-soon-badge">
+            Coming Soon
+        </div>
+
+        <div class="preview-container">
+            <div class="mock-window">
+                <div class="window-header">
+                    <div class="dot red"></div>
+                    <div class="dot yellow"></div>
+                    <div class="dot green"></div>
+                </div>
+                <div class="mock-content">
+                    <div class="sidebar">
+                        <div class="line short"></div>
+                        <div class="line long"></div>
+                        <div class="line short"></div>
+                        <div class="line long"></div>
+                        <div class="line short"></div>
+                    </div>
+                    <div class="editor-area">
+                        <div class="chat-bubble">
+                            <div class="line long" style="margin-bottom: 8px;"></div>
+                            <div class="line short"></div>
+                        </div>
+                        <div class="chat-bubble" style="align-self: flex-end; width: 60%; background: rgba(255,255,255,0.06);">
+                            <div class="line long"></div>
+                        </div>
+                        <div class="chat-bubble">
+                            <div class="line short" style="margin-bottom: 8px;"></div>
+                            <div class="line long" style="margin-bottom: 8px;"></div>
+                            <div class="line long"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <span>&copy; 2026 Roblox Thailand Community & Network (RTCN)</span>
+        <div class="footer-links">
+            <a href="https://www.robloxthailand.com" target="_blank">Our site</a>
+        </div>
+    </footer>
+</body>
+</html>
