@@ -1,5 +1,5 @@
 :root {
-    /* Color Palette */
+    /* Color Palette — Dark Mode (default) */
     --bg: #09090b;
     --surface: #18181b;
     --surface-hover: #27272a;
@@ -9,6 +9,7 @@
     --border: #ffffff14;
     --border-hover: #ffffff2e;
     --accent: #ffffff;
+    --nav-bg: rgba(9, 9, 11, 0.85);
     
     /* Sizing & Spacing */
     --max-width: 1200px;
@@ -22,6 +23,23 @@
     --transition-base: 0.3s ease;
 }
 
+/* ==========================================================================
+    LIGHT MODE
+    To add more light-mode overrides, just add them here under [data-theme="light"]
+ ========================================================================== */
+[data-theme="light"] {
+    --bg: #fafafa;
+    --surface: #f4f4f5;
+    --surface-hover: #e4e4e7;
+    --fg: #09090b;
+    --fg-muted: #52525b;
+    --fg-dim: #71717a;
+    --border: #00000012;
+    --border-hover: #00000022;
+    --accent: #09090b;
+    --nav-bg: rgba(250, 250, 250, 0.85);
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -31,13 +49,15 @@
 body {
     background-color: var(--bg);
     color: var(--fg);
-    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-family: 'DM Sans', 'Sarabun', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     line-height: 1.6;
+    /* Smooth transition when toggling themes */
+    transition: background-color var(--transition-base), color var(--transition-base);
 }
 
 /* Grain Effect Overlay for that premium texture */
@@ -51,6 +71,11 @@ body::after {
     background-size: 256px 256px;
     position: fixed;
     inset: 0;
+}
+
+/* Reduce grain opacity in light mode so it doesn't feel gritty */
+[data-theme="light"] body::after {
+    opacity: 0.015;
 }
 
 /* Utility Classes */
@@ -80,25 +105,31 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ==========================================================================
     NAVIGATION
+    FIX: .nav-wrapper is now the sticky, full-width element with the background.
+    .nav (inside .container) handles the inner layout only.
  ========================================================================== */
+.nav-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--transition-base), background-color var(--transition-base);
+}
+
+.nav-wrapper.scrolled {
+    border-bottom-color: var(--border);
+}
+
 .nav {
-    padding: 1.5rem 0;
+    padding: 1.25rem 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
-    top: 0;
-    background: rgba(9, 9, 11, 0.8);
-    backdrop-filter: blur(12px);
-    z-index: 1000;
-    border-bottom: 1px solid transparent;
-    transition: var(--transition-base);
     flex-wrap: wrap;
     gap: 1rem;
-}
-
-.nav.scrolled {
-    border-bottom: 1px solid var(--border);
 }
 
 .nav-brand {
@@ -122,32 +153,68 @@ img { max-width: 100%; height: auto; display: block; }
     justify-content: center;
 }
 
+/* Theme & language toggle buttons sit together on the right */
+.nav-controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* Shared style for all nav pill buttons (links, lang, theme) */
 .btn-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
     padding: 0.5rem 1rem;
     border-radius: var(--radius-full);
     font-size: 0.825rem;
+    font-family: inherit;
     border: 1px solid var(--border);
     color: var(--fg-muted);
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(128, 128, 128, 0.05);
     cursor: pointer;
     white-space: nowrap;
+    transition: color var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+    line-height: 1;
 }
 
 .btn-link:hover {
     color: var(--fg);
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(128, 128, 128, 0.1);
     border-color: var(--fg-muted);
 }
 
+/* Theme toggle: show sun in dark mode, moon in light mode */
+.theme-btn .icon-moon { display: none; }
+.theme-btn .icon-sun  { display: block; }
+
+[data-theme="light"] .theme-btn .icon-sun  { display: none; }
+[data-theme="light"] .theme-btn .icon-moon { display: block; }
+
 @media (max-width: 768px) {
     .nav {
-        justify-content: center;
         padding: 1rem 0;
+        gap: 0.75rem;
+    }
+
+    /* On mobile: brand left, controls right, links take full row below */
+    .nav-brand {
+        flex: 1;
     }
 
     .nav-brand span {
-        font-size: 0.95rem;
-        text-align: center;
+        font-size: 0.9rem;
+    }
+
+    .nav-links {
+        width: 100%;
+        order: 3;
+    }
+
+    .nav-controls {
+        order: 2;
     }
 }
 
@@ -194,7 +261,9 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ==========================================================================
     COLLABORATED WITH (INFINITE TICKER)
-========================================================================== */
+    FIX: Items are now grouped in .ticker-set. JS clones the set for the loop.
+    Padding-right on .ticker-set acts as the trailing gap so -50% lands perfectly.
+ ========================================================================== */
 .collab-section {
     padding: 4rem 0;
     border-bottom: 1px solid var(--border);
@@ -213,13 +282,27 @@ img { max-width: 100%; height: auto; display: block; }
     overflow: hidden;
     display: flex;
     mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
 }
 
 .ticker-track {
     display: flex;
-    gap: 4rem;
     align-items: center;
     animation: scrollTicker 40s linear infinite;
+    will-change: transform;
+}
+
+.ticker-track:hover {
+    animation-play-state: paused;
+}
+
+/* Each set is a self-contained flex row with a trailing gap for seamless looping */
+.ticker-set {
+    display: flex;
+    gap: 4rem;
+    align-items: center;
+    padding-right: 4rem; /* This trailing space makes both sets equal width, so translateX(-50%) is pixel-perfect */
+    flex-shrink: 0;
 }
 
 .ticker-item {
@@ -232,7 +315,7 @@ img { max-width: 100%; height: auto; display: block; }
     width: auto;
     opacity: 0.6;
     filter: grayscale(1);
-    transition: 0.3s;
+    transition: opacity var(--transition-base), filter var(--transition-base);
 }
 
 .ticker-item img:hover {
@@ -241,8 +324,8 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 @keyframes scrollTicker {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); } /* Scrolls exactly half its duplicated length */
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); } /* Scrolls exactly one set width */
 }
 
 /* ==========================================================================
@@ -285,7 +368,7 @@ img { max-width: 100%; height: auto; display: block; }
     border-radius: var(--radius-md);
     padding: 2.5rem 1.5rem;
     text-align: center;
-    transition: var(--transition-base);
+    transition: border-color var(--transition-base), transform var(--transition-base);
 }
 
 .stat-card:hover {
@@ -300,7 +383,7 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .stat-number-box {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(128, 128, 128, 0.05);
     padding: 2rem 1rem;
     border-radius: var(--radius-sm);
     margin-bottom: 1rem;
@@ -338,7 +421,7 @@ img { max-width: 100%; height: auto; display: block; }
     flex-direction: column;
     align-items: center;
     gap: 1.5rem;
-    transition: var(--transition-base);
+    transition: background-color var(--transition-base);
 }
 
 .feature-card:hover {
@@ -351,7 +434,7 @@ img { max-width: 100%; height: auto; display: block; }
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(128, 128, 128, 0.1);
     border-radius: var(--radius-sm);
     color: var(--fg);
 }
@@ -371,6 +454,8 @@ img { max-width: 100%; height: auto; display: block; }
     scroll-snap-type: x mandatory;
     scrollbar-width: none; /* Firefox */
     padding-bottom: 1rem;
+    overscroll-behavior-x: contain; /* Prevents the page from scrolling when swiping the carousel */
+    touch-action: pan-x;
 }
 
 .carousel-track::-webkit-scrollbar {
@@ -378,7 +463,7 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .carousel-card {
-    flex: 0 0 85%; /* Mobile width */
+    flex: 0 0 85%; /* Mobile: one card takes up most of the screen */
     scroll-snap-align: center;
     background: var(--surface);
     border: 1px solid var(--border);
@@ -391,15 +476,24 @@ img { max-width: 100%; height: auto; display: block; }
 
 @media (min-width: 768px) {
     .carousel-card {
-        flex: 0 0 calc(33.333% - 1rem); /* Desktop 3 columns */
+        flex: 0 0 calc(33.333% - 1rem); /* Desktop: show 3 cards */
         scroll-snap-align: start;
     }
+}
+
+/* Team member avatar style, applied via class instead of inline styles */
+.team-avatar {
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    width: 60%;
+    margin: 0 auto;
+    object-fit: cover;
 }
 
 .card-image-placeholder {
     width: 100%;
     aspect-ratio: 1/1;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(128, 128, 128, 0.05);
     border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
@@ -428,7 +522,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 .card-links a {
     color: var(--fg-muted);
-    transition: var(--transition-fast);
+    transition: color var(--transition-fast);
 }
 .card-links a:hover {
     color: var(--fg);
@@ -445,15 +539,16 @@ img { max-width: 100%; height: auto; display: block; }
 .diamond {
     width: 8px;
     height: 8px;
-    background: var(--border);
+    background: var(--border-hover);
     transform: rotate(45deg);
-    transition: var(--transition-base);
+    transition: background-color var(--transition-base), transform var(--transition-base);
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .diamond.active {
     background: var(--fg);
-    transform: rotate(45deg) scale(1.2);
+    transform: rotate(45deg) scale(1.4);
 }
 
 /* ==========================================================================
@@ -512,6 +607,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 .contact-item svg {
     color: var(--fg);
+    flex-shrink: 0;
 }
 
 .connect-feeds {
@@ -521,11 +617,11 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 @media (min-width: 600px) {
-     .connect-feeds { grid-template-columns: 1fr 1fr; }
+    .connect-feeds { grid-template-columns: 1fr 1fr; }
 }
 
 .mock-feed {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(128, 128, 128, 0.03);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     aspect-ratio: 3/4;
@@ -594,7 +690,7 @@ footer {
 .footer-links a {
     color: var(--fg-muted);
     font-size: 0.9rem;
-    transition: var(--transition-fast);
+    transition: color var(--transition-fast), transform var(--transition-fast);
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -623,19 +719,44 @@ footer {
     }
 }
 
-/* Animations */
+/* ==========================================================================
+    ANIMATIONS
+ ========================================================================== */
 @keyframes fadeUp {
     from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .reveal {
     opacity: 0;
     transform: translateY(30px);
-    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .reveal.active {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Respect the user's system preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+        animation-play-state: paused;
+    }
+    .hero-title {
+        animation: none;
+        opacity: 1;
+    }
+    .hero-image-wrap {
+        animation: none;
+        opacity: 1;
+    }
+    .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+    .stat-card:hover {
+        transform: none;
+    }
 }

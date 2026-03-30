@@ -1,14 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="darkreader-lock">
-    <meta name="color-scheme" content="dark">
+    <meta name="color-scheme" content="dark light">
     <meta name="robots" content="index, follow">
     <meta name="referrer" content="no-referrer">
     <meta name="format-detection" content="telephone=no">
+
+    <!--
+        Apply the saved theme before the page renders to prevent a flash of the wrong theme.
+        This tiny script must stay in <head> and run synchronously.
+    -->
+    <script>
+        (function () {
+            var saved = localStorage.getItem('theme');
+            var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.dataset.theme = saved || (prefersDark ? 'dark' : 'light');
+        })();
+    </script>
 
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -16,8 +27,13 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png">
 
+    <!-- Hreflang for SEO: tells search engines this page serves both EN and TH -->
+    <link rel="alternate" hreflang="en" href="https://www.robloxthailand.com">
+    <link rel="alternate" hreflang="th" href="https://www.robloxthailand.com">
+    <link rel="alternate" hreflang="x-default" href="https://www.robloxthailand.com">
+
     <title>RTCN | Roblox Thailand Community & Network</title>
-    <meta name="title" content="Roblox Thailand Community & Network (RTCN)">
+    <meta name="title" content="Roblox Thailand Community & Network">
     <meta name="description" content="Connecting the Thai Roblox community. Roblox Thailand Community & Network (RTCN) is a vibrant organization for Roblox enthusiasts in Thailand, a subsidiary of the Sriwisa Group. The organization manages two active groups: Roblox Studio Thailand, an organization with over 10,000 members who prioritize development and design, and Roblox Thailand Community, a platform that unites players and creators. The Roblox Thailand News page functions as a primary source of information for the community, providing updates on recent developments in the Roblox universe and the operations of our event center, TREP.">
     <meta name="language" content="en">
     <meta name="author" content="Ekaphop">
@@ -25,9 +41,9 @@
     <meta name="keywords" content="portfolio, organization website, company website, organization webpage, company webpage, brand collaboration, social media, game studio, community, thailand, services">
     
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Roblox Thailand Community & Network">
+    <meta property="og:site_name" content="Roblox Thailand Community & Network (RTCN)">
     <meta property="og:url" content="https://www.robloxthailand.com">
-    <meta property="og:title" content="Roblox Thailand Community & Network (RTCN)">
+    <meta property="og:title" content="Roblox Thailand Community & Network">
     <meta property="og:description" content="Connecting the Thai Roblox community. Roblox Thailand Community & Network (RTCN) is a vibrant organization for Roblox enthusiasts in Thailand, a subsidiary of the Sriwisa Group. The organization manages two active groups: Roblox Studio Thailand, an organization with over 10,000 members who prioritize development and design, and Roblox Thailand Community, a platform that unites players and creators. The Roblox Thailand News page functions as a primary source of information for the community, providing updates on recent developments in the Roblox universe and the operations of our event center, TREP.">
     <meta property="og:image" content="https://www.robloxthailand.com/RTCN_banner.webp">
     <meta property="og:locale" content="en_US">
@@ -46,37 +62,48 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="msapplication-TileImage" content="https://www.robloxthailand.com/RTCN_logo.webp">
     
-    <link rel="preload" as="image" href="/RTCN_banner.webp" fetchpriority="high" />
-    <link rel="preload" as="image" href="/RTCN_logo.webp" fetchpriority="high" />
-    <link rel="preload" as="image" href="/assets/site-images/collaborated-icons/Roblox_Logo_White.webp" fetchpriority="high" />
+    <!-- Only the LCP image (banner) gets fetchpriority="high" -->
+    <link rel="preload" as="image" href="/RTCN_banner.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="/RTCN_logo.webp" fetchpriority="auto">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-    <!-- Site navigation -->
-    <nav class="nav container" id="navbar">
-        <div class="nav-brand">
-            <!-- Logo Image -->
-            <img src="RTCN_logo.webp" alt="RTCN Logo">
-            <span>Roblox Thailand Community & Network</span>
-        </div>
-        <div class="nav-links">
-            <!-- Navigation Links -->
-            <a href="#about" class="btn-link">About Us</a>
-            <!-- <a href="https://www.robloxthailand.com/blog" class="btn-link">Our Blog</a>
-            <a href="https://www.robloxthailand.com/events" class="btn-link">Events</a> -->
-        </div>
-    </nav>
+    <header class="nav-wrapper" id="navbar">
+        <nav class="nav container" aria-label="Main navigation">
+            <div class="nav-brand">
+                <!-- Logo Image -->
+                <img src="RTCN_logo.webp" alt="RTCN Logo" width="32" height="32">
+                <span>Roblox Thailand Community & Network</span>
+            </div>
+            <div class="nav-links">
+                <!-- Navigation Links -->
+                <a href="#about" class="btn-link" data-i18n="nav-about">About Us</a>
+                <!-- <a href="https://www.robloxthailand.com/#blog" class="btn-link">Our Blog</a>
+                <a href="https://www.robloxthailand.com/#events" class="btn-link">Events</a> -->
+            </div>
+            <!-- Theme and language toggle buttons -->
+            <div class="nav-controls">
+                <button class="btn-link lang-btn" id="langToggle" aria-label="Switch to Thai language">TH</button>
+                <button class="btn-link theme-btn" id="themeToggle" aria-label="Switch to light mode">
+                    <!-- Sun icon: shown in dark mode (click to go light) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" aria-hidden="true" class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                    <!-- Moon icon: shown in light mode (click to go dark) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" aria-hidden="true" class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79"/></svg>
+                </button>
+            </div>
+        </nav>
+    </header>
 
     <main>
         <!-- Hero section -->
         <section class="hero container">
-            <h1 class="hero-title">Connecting the Thai Community.</h1>
+            <h1 class="hero-title" data-i18n="hero-title">Connecting the Thai Community.</h1>
             <div class="hero-image-wrap">
                 <!-- Hero Image Banner -->
                 <img src="RTCN_banner.webp" alt="RTCN Banner Graphic featuring tropical setting and logo">
@@ -85,77 +112,72 @@
 
         <!-- Collaborated with -->
         <section class="collab-section">
-            <h3 class="collab-title">Collaborated With</h3>
+            <h3 class="collab-title" data-i18n="collab-title">Collaborated With</h3>
             <div class="ticker-wrapper">
-                <!-- We duplicate the track content twice to create a seamless infinite loop via CSS -->
+                <!--
+                    Items are now in a single .ticker-set wrapper.
+                    JavaScript will automatically clone it for the seamless loop.
+                    To add a new logo: copy one .ticker-item and paste it here.
+                -->
                 <div class="ticker-track">
-                    <!-- FIRST SET -->
-                    <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/Roblox_Logo_White.webp" width="500" height="500" alt="Roblox logo in white"></div>
-                    <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/THACCA-Logo-Red.webp" width="500" height="500" alt="THACCA logo in red"></div>
-                    <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/sriwisa.webp" width="500" height="500" alt="Sriwisa logo in yellowish orange"></div>
-                    <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/metaverseassociation.webp" width="500" height="500" alt="Metaverse Association logo"></div>
-                    <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/Aniver_Metaverse_Logo.webp" width="500" height="500" alt="Aniver Metaverse logo"></div>
-                    <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/AYCAF.webp" width="500" height="500" alt="AYCAF logo"></div>
-                    <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/AKRI_logo.webp" width="500" height="500" alt="AKRI logo"></div>
-                    
-                    <!-- SECOND SET (Exact duplicate for seamless loop) -->
-                    <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/Roblox_Logo_White.webp" width="500" height="500" alt="Roblox logo in white"></div>
-                    <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/THACCA-Logo-Red.webp" width="500" height="500" alt="THACCA logo in red"></div>
-                    <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/sriwisa.webp" width="500" height="500" alt="Sriwisa logo in yellowish orange"></div>
-                    <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/metaverseassociation.webp" width="500" height="500" alt="Metaverse Association logo"></div>
-                    <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/Aniver_Metaverse_Logo.webp" width="500" height="500" alt="Aniver Metaverse logo"></div>
-                    <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/AYCAF.webp" width="500" height="500" alt="AYCAF logo"></div>
-                    <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/AKRI_logo.webp" width="500" height="500" alt="AKRI logo"></div>
+                    <div class="ticker-set">
+                        <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/Roblox_Logo_White.webp" width="120" height="40" loading="lazy" decoding="async" alt="Roblox"></div>
+                        <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/THACCA-Logo-Red.webp" width="120" height="40" loading="lazy" decoding="async" alt="THACCA"></div>
+                        <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/sriwisa.webp" width="120" height="40" loading="lazy" decoding="async" alt="Sriwisa"></div>
+                        <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/metaverseassociation.webp" width="120" height="40" loading="lazy" decoding="async" alt="Metaverse Association"></div>
+                        <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/Aniver_Metaverse_Logo.webp" width="120" height="40" loading="lazy" decoding="async" alt="Aniver Metaverse"></div>
+                        <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/AYCAF.webp" width="120" height="40" loading="lazy" decoding="async" alt="AYCAF"></div>
+                        <div class="ticker-item"><img src="/assets/site-images/collaborated-icons/AKRI_logo.webp" width="120" height="40" loading="lazy" decoding="async" alt="AKRI"></div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Who are we -->
         <section id="about" class="section-padding container reveal">
-            <h2 class="section-title text-center">Who are we?</h2>
+            <h2 class="section-title text-center" data-i18n="about-title">Who are we?</h2>
             <div class="who-we-are-grid">
                 <!-- About Section Image -->
-                <img src="/assets/site-images/team.webp?auto=format&fit=crop&q=80&w=1000" alt="Team collaborating" class="who-image">
+                <img src="/assets/site-images/team.webp" alt="Team collaborating" class="who-image" loading="lazy" decoding="async">
                 <div>
                     <!-- About Section Text -->
-                    <p>Roblox Thailand Community & Network (RTCN) is an organization dedicated to bringing Thai Roblox players together, supporting various initiatives, and organizing events to strengthen community connections. We are passionate about the Roblox platform and the Metaverse.</p>
-                    <br>
-                    <p>The organization focuses on developing and promoting communication within the Roblox Thailand community, with most activities and events managed through Facebook.</p>
+                    <p data-i18n="about-p1">Roblox Thailand Community & Network (RTCN) is an organization dedicated to bringing Thai Roblox players together, supporting various initiatives, and organizing events to strengthen community connections. We are passionate about the Roblox platform and the Metaverse.</p>
+                    <p style="margin-top: 1rem;" data-i18n="about-p2">The organization focuses on developing and promoting communication within the Roblox Thailand community, with most activities and events managed through Facebook.</p>
                 </div>
             </div>
         </section>
 
         <!-- Our data shows -->
         <section class="section-padding container reveal">
-            <h2 class="section-title text-center">Our data shows</h2>
+            <h2 class="section-title text-center" data-i18n="stats-title">Our data shows</h2>
             <div class="stats-grid">
                 
                 <!-- Stat Card 1 -->
                 <article class="stat-card">
-                    <h3 class="stat-title">Total Members</h3>
+                    <h3 class="stat-title" data-i18n="stat1-title">Total Members</h3>
                     <div class="stat-number-box">
                         <!-- data-target is the number it will count up to -->
                         <div class="stat-number counter" data-target="20000">0</div>
                     </div>
-                    <p class="stat-subtitle">*As of Q1 2026</p>
+                    <p class="stat-subtitle" data-i18n="stat-note">*As of Q1 2026</p>
                 </article>
 
                 <!-- Stat Card 2 -->
                 <article class="stat-card">
-                    <h3 class="stat-title">Active Projects</h3>
+                    <h3 class="stat-title" data-i18n="stat2-title">Active Projects</h3>
                     <div class="stat-number-box">
                         <div class="stat-number counter" data-target="8">0</div>
                     </div>
-                    <p class="stat-subtitle">*As of Q1 2026</p>
+                    <p class="stat-subtitle" data-i18n="stat-note">*As of Q1 2026</p>
                 </article>
 
                 <!-- Stat Card 3 -->
                 <article class="stat-card">
-                    <h3 class="stat-title">Events Hosted</h3>
+                    <h3 class="stat-title" data-i18n="stat3-title">Events Hosted</h3>
                     <div class="stat-number-box">
                         <div class="stat-number counter" data-target="8">0</div>
                     </div>
-                    <p class="stat-subtitle">*As of Q1 2026</p>
+                    <p class="stat-subtitle" data-i18n="stat-note">*As of Q1 2026</p>
                 </article>
 
             </div>
@@ -163,35 +185,35 @@
 
         <!-- Why choose us -->
         <section class="section-padding container reveal">
-            <h2 class="section-title text-center">Why choose us?</h2>
+            <h2 class="section-title text-center" data-i18n="features-title">Why choose us?</h2>
             <div class="features-grid">
                 
                 <!-- Feature 1 -->
                 <article class="feature-card">
                     <div class="feature-icon">
                         <!-- SVG Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
                     </div>
-                    <h3>Secure & Safe</h3>
-                    <p>We prioritize the safety and security of our community members through active moderation and guidelines across our groups, servers, and communities.</p>
+                    <h3 data-i18n="feat1-title">Secure & Safe</h3>
+                    <p data-i18n="feat1-desc">We prioritize the safety and security of our community members through active moderation and guidelines across our groups, servers, and communities.</p>
                 </article>
 
                 <!-- Feature 2 -->
                 <article class="feature-card">
                     <div class="feature-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></svg>
                     </div>
-                    <h3>Dedicated Support</h3>
-                    <p>Our team is always ready to assist and provide resources for developers and players alike.</p>
+                    <h3 data-i18n="feat2-title">Dedicated Support</h3>
+                    <p data-i18n="feat2-desc">Our team is always ready to assist and provide resources for developers and players alike.</p>
                 </article>
 
                 <!-- Feature 3 -->
                 <article class="feature-card">
                     <div class="feature-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87m-4-12a4 4 0 0 1 0 7.75"/></svg>
                     </div>
-                    <h3>Growing Network</h3>
-                    <p>Connect with thousands of like-minded individuals, creators, and enthusiasts across Thailand.</p>
+                    <h3 data-i18n="feat3-title">Growing Network</h3>
+                    <p data-i18n="feat3-desc">Connect with thousands of like-minded individuals, creators, and enthusiasts across Thailand.</p>
                 </article>
 
             </div>
@@ -260,139 +282,134 @@
 
         <!-- Meet the team (carousel) -->
         <section class="section-padding container reveal carousel-wrapper" data-carousel="team">
-            <h2 class="section-title text-center">Meet the team</h2>
+            <h2 class="section-title text-center" data-i18n="team-title">Meet the team</h2>
             
             <div class="carousel-container">
                 <div class="carousel-track">
                     <!-- Team Card 1 -->
                     <article class="carousel-card">
-                        <img src="/assets/team-images/kinsriwisa.webp?auto=format&fit=crop&q=80&w=400" alt="Panumes Sriwisathiyakun (Kin), First team member" class="card-image-placeholder" style="border-radius: 50%; aspect-ratio: 1/1; width: 60%; margin: 0 auto;">
+                        <img src="/assets/team-images/kinsriwisa.webp" alt="Panumes Sriwisathiyakun (Kin), First team member" class="card-image-placeholder team-avatar" loading="lazy" decoding="async">
                         <div class="text-center">
                             <h3 class="card-title">Panumes (Kin) Sriwisathiyakun</h3>
-                            <p class="card-desc">Founder of RTCN</p>
+                            <p class="card-desc" data-i18n="role-founder">Founder of RTCN</p>
                         </div>
                         <div class="card-links" style="justify-content: center;">
-                            <a href="https://x.com/kinsriwisa" target="_blank" aria-label="Twitter/X"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a>
-                            <a href="https://www.linkedin.com/in/panumes-sriwisathiyakun-99913820b" target="_blank" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-                            <a href="https://www.roblox.com/users/646193490/profile" target="_blank" aria-label="Roblox"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M4.9 1L1 19.1 19.1 23 23 4.9 4.9 1z"/> <path d="M13.4 14.3l-3.7-.9.9-3.7 3.7.9-.9 3.7z"/> </svg> </a>
+                            <a href="https://x.com/kinsriwisa" target="_blank" rel="noopener noreferrer" aria-label="Twitter/X"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2"/></svg></a>
+                            <a href="https://www.linkedin.com/in/panumes-sriwisathiyakun-99913820b" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6M2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
+                            <a href="https://www.roblox.com/users/646193490/profile" target="_blank" rel="noopener noreferrer" aria-label="Roblox"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M4.9 1 1 19.1 19.1 23 23 4.9z"/><path d="m13.4 14.3-3.7-.9.9-3.7 3.7.9z"/></svg></a>
                         </div>
                     </article>
 
                     <!-- Team Card 2 -->
                     <article class="carousel-card">
-                        <img src="/assets/team-images/femtrs-ekaphop.webp?auto=format&fit=crop&q=80&w=400" alt="Saku (Femtrs), Second team member" class="card-image-placeholder" style="border-radius: 50%; aspect-ratio: 1/1; width: 60%; margin: 0 auto;">
+                        <img src="/assets/team-images/femtrs-ekaphop.webp" alt="Ekaphop Segal (Shane), Second team member" class="card-image-placeholder team-avatar" loading="lazy" decoding="async">
                         <div class="text-center">
                             <h3 class="card-title">Ekaphop (Shane) Segal</h3>
-                            <p class="card-desc">Co-Founder of RTCN</p>
+                            <p class="card-desc" data-i18n="role-cofounder">Co-Founder of RTCN</p>
                         </div>
                         <div class="card-links" style="justify-content: center;">
-                             <a href="https://x.com/mafusaku" target="_blank" aria-label="Twitter/X"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a>
-                             <a href="https://x.com/scardayoo" target="_blank" aria-label="Twitter/X"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a>
-                             <a href="https://www.linkedin.com/in/essegal" target="_blank" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-                            <a href="https://www.github.com/mafusaku" target="_blank" aria-label="Github"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg></a>
-                            <a href="https://www.roblox.com/share?code=0d22a0bf55305a4ca0d622407814cd96&type=Profile" target="_blank" aria-label="Roblox"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M4.9 1L1 19.1 19.1 23 23 4.9 4.9 1z"/> <path d="M13.4 14.3l-3.7-.9.9-3.7 3.7.9-.9 3.7z"/> </svg> </a>
+                            <a href="https://x.com/mafusaku" target="_blank" rel="noopener noreferrer" aria-label="Twitter/X"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2"/></svg></a>
+                            <a href="https://x.com/scardayoo" target="_blank" rel="noopener noreferrer" aria-label="Twitter/X (alt)"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2"/></svg></a>
+                            <a href="https://www.linkedin.com/in/essegal" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6M2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
+                            <a href="https://www.github.com/mafusaku" target="_blank" rel="noopener noreferrer" aria-label="Github"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65S8.93 17.38 9 18v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg></a>
+                            <a href="https://www.roblox.com/share?code=0d22a0bf55305a4ca0d622407814cd96&type=Profile" target="_blank" rel="noopener noreferrer" aria-label="Roblox"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M4.9 1 1 19.1 19.1 23 23 4.9z"/><path d="m13.4 14.3-3.7-.9.9-3.7 3.7.9z"/></svg></a>
                         </div>
                     </article>
 
-                     <!-- Team Card 3 -->
+                    <!-- Team Card 3 -->
                     <article class="carousel-card">
-                        <img src="/assets/team-images/rxztr.webp?auto=format&fit=crop&q=80&w=400" alt="Kirati Akanisthaporn (Tar), Third team member" class="card-image-placeholder" style="border-radius: 50%; aspect-ratio: 1/1; width: 60%; margin: 0 auto;">
+                        <img src="/assets/team-images/rxztr.webp" alt="Kirati Akanisthaporn (Tar), Third team member" class="card-image-placeholder team-avatar" loading="lazy" decoding="async">
                         <div class="text-center">
                             <h3 class="card-title">Kirati (Tar) Akanisthaporn</h3>
-                            <p class="card-desc">Co-Founder of RTCN</p>
+                            <p class="card-desc" data-i18n="role-cofounder">Co-Founder of RTCN</p>
                         </div>
                         <div class="card-links" style="justify-content: center;">
-                            <a href="https://www.linkedin.com/in/kirati-akanisthaporn-10aa61397" target="_blank" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-                            <a href="https://www.roblox.com/users/157512226/profile" target="_blank" aria-label="Roblox"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M4.9 1L1 19.1 19.1 23 23 4.9 4.9 1z"/> <path d="M13.4 14.3l-3.7-.9.9-3.7 3.7.9-.9 3.7z"/> </svg> </a>
+                            <a href="https://www.linkedin.com/in/kirati-akanisthaporn-10aa61397" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6M2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
+                            <a href="https://www.roblox.com/users/157512226/profile" target="_blank" rel="noopener noreferrer" aria-label="Roblox"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M4.9 1 1 19.1 19.1 23 23 4.9z"/><path d="m13.4 14.3-3.7-.9.9-3.7 3.7.9z"/></svg></a>
                         </div>
                     </article>
 
                     <!-- Team Card 4 -->
                     <article class="carousel-card">
-                        <img src="/assets/team-images/nadol.webp?auto=format&fit=crop&q=80&w=400" alt="Kochakarn Srinoi (Kan), Fourth team member" class="card-image-placeholder" style="border-radius: 50%; aspect-ratio: 1/1; width: 60%; margin: 0 auto;">
+                        <img src="/assets/team-images/nadol.webp" alt="Kochakarn Srinoi (Kan), Fourth team member" class="card-image-placeholder team-avatar" loading="lazy" decoding="async">
                         <div class="text-center">
                             <h3 class="card-title">Kochakarn (Kan) Srinoi</h3>
-                            <p class="card-desc">Head of Developer Relations</p>
+                            <p class="card-desc" data-i18n="role-dev-rel">Head of Developer Relations</p>
                         </div>
                         <div class="card-links" style="justify-content: center;">
-                            <a href="https://www.instagram.com/ken_kingx1x" target="_blank" aria-label="Instagram"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/> <path d="M16 11.37a4 4 0 1 1-3.37-3.37 4 4 0 0 1 3.37 3.37z"/> <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/> </svg> </a>
+                            <a href="https://www.instagram.com/ken_kingx1x" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37m1.5-4.87h.01"/></svg></a>
                         </div>
                     </article>
 
                     <!-- Team Card 5 -->
                     <article class="carousel-card">
-                        <img src="/assets/team-images/FILMKWM.webp?auto=format&fit=crop&q=80&w=400" alt="Naruenart Mokarat (Film), Fifth team member" class="card-image-placeholder" style="border-radius: 50%; aspect-ratio: 1/1; width: 60%; margin: 0 auto;">
+                        <img src="/assets/team-images/FILMKWM.webp" alt="Naruenart Mokarat (Film), Fifth team member" class="card-image-placeholder team-avatar" loading="lazy" decoding="async">
                         <div class="text-center">
                             <h3 class="card-title">Naruenart (Film) Mokarat</h3>
-                            <p class="card-desc">Lead of the Content & Media Team</p>
+                            <p class="card-desc" data-i18n="role-content">Lead of the Content & Media Team</p>
                         </div>
                         <div class="card-links" style="justify-content: center;">
-                            <a href="https://www.instagram.com/green.poiiw" target="_blank" aria-label="Instagram"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/> <path d="M16 11.37a4 4 0 1 1-3.37-3.37 4 4 0 0 1 3.37 3.37z"/> <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/> </svg> </a>
-                            <a href="https://www.linkedin.com/in/naruenatmokarat" target="_blank" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-                            <a href="https://www.roblox.com/users/3876982707/profile" target="_blank" aria-label="Roblox"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M4.9 1L1 19.1 19.1 23 23 4.9 4.9 1z"/> <path d="M13.4 14.3l-3.7-.9.9-3.7 3.7.9-.9 3.7z"/> </svg> </a>
+                            <a href="https://www.instagram.com/green.poiiw" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37m1.5-4.87h.01"/></svg></a>
+                            <a href="https://www.linkedin.com/in/naruenatmokarat" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6M2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></a>
+                            <a href="https://www.roblox.com/users/3876982707/profile" target="_blank" rel="noopener noreferrer" aria-label="Roblox"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M4.9 1 1 19.1 19.1 23 23 4.9z"/><path d="m13.4 14.3-3.7-.9.9-3.7 3.7.9z"/></svg></a>
                         </div>
                     </article>
 
                     <!-- Team Card 6 -->
                     <article class="carousel-card">
-                        <img src="/assets/team-images/aslam.webp?auto=format&fit=crop&q=80&w=400" alt="Phanthakan Chuadlao (Lam), Sixth team member" class="card-image-placeholder" style="border-radius: 50%; aspect-ratio: 1/1; width: 60%; margin: 0 auto;">
+                        <img src="/assets/team-images/aslam.webp" alt="Phanthakan Chuadlao (Lam), Sixth team member" class="card-image-placeholder team-avatar" loading="lazy" decoding="async">
                         <div class="text-center">
                             <h3 class="card-title">Phanthakan (Lam) Chuadlao</h3>
-                            <p class="card-desc">Project Developer</p>
+                            <p class="card-desc" data-i18n="role-dev">Project Developer</p>
                         </div>
                         <div class="card-links" style="justify-content: center;">
-                            <a href="https://www.instagram.com/as_lam.08" target="_blank" aria-label="Instagram"> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/> <path d="M16 11.37a4 4 0 1 1-3.37-3.37 4 4 0 0 1 3.37 3.37z"/> <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/> </svg> </a>
+                            <a href="https://www.instagram.com/as_lam.08" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37m1.5-4.87h.01"/></svg></a>
+                        </div>
                     </article>
 
                     <!-- Team Card [Placeholder] -->
                     <!-- <article class="carousel-card">
-                        <div class="card-image-placeholder" style="border-radius: 50%; width: 60%; margin: 0 auto;">[ Image ]</div>
+                        <div class="card-image-placeholder team-avatar">[ Image ]</div>
                         <div class="text-center">
                             <h3 class="card-title">Somchai T.</h3>
                             <p class="card-desc">Events Coordinator</p>
                         </div>
                         <div class="card-links" style="justify-content: center;">
-                             <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+                            <a href="#" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
                         </div>
                     </article> -->
                 </div>
             </div>
             
-            <div class="carousel-indicators">
-                <div class="diamond active"></div>
-                <div class="diamond"></div>
-                <div class="diamond"></div>
-                <div class="diamond"></div>
-                <div class="diamond"></div>
-                <div class="diamond"></div>
-            </div>
+            <!-- JavaScript will populate the diamonds dynamically based on card count -->
+            <div class="carousel-indicators"></div>
         </section>
 
         <!-- Connect with us -->
         <section class="section-padding container reveal">
-            <h2 class="section-title text-center">Connect with us</h2>
+            <h2 class="section-title text-center" data-i18n="connect-title">Connect with us</h2>
             <div class="connect-box">
                 <!-- Background Image for the connect box -->
-                <img src="/assets/site-images/shapes.webp?auto=format&fit=crop&q=80" alt="" class="connect-bg">
+                <img src="/assets/site-images/shapes.webp" alt="" class="connect-bg" loading="lazy" decoding="async">
                 
                 <div class="connect-content">
-                    <h3 style="font-size: 2rem; margin-bottom: 2rem;">Get in touch</h3>
+                    <h3 style="font-size: 2rem; margin-bottom: 2rem;" data-i18n="connect-subtitle">Get in touch</h3>
                     <div class="connect-info">
                         <div class="contact-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2"/><path d="m22 6-10 7L2 6"/></svg>
                             <span><a href="mailto:founder@robloxthailand.com?subject=Inquiry%20via%20Website&body=Dear%20Founder,%0D%0A%0D%0AI%20would%20like%20to%20inquire...%0D%0A%0D%0AThanks.%0D%0A%5B%20Sent%20from%20RTCN's%20Website%20%5D" aria-label="Email">founder@robloxthailand.com</a></span>
                         </div>
                         <div class="contact-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2"/><path d="m22 6-10 7L2 6"/></svg>
                             <span><a href="mailto:cofounder@robloxthailand.com?subject=Inquiry%20via%20Website&body=Dear%20Co-Founder,%0D%0A%0D%0AI%20would%20like%20to%20inquire...%0D%0A%0D%0AThanks.%0D%0A%5B%20Sent%20from%20RTCN's%20Website%20%5D" aria-label="Email">cofounder@robloxthailand.com</a></span>
                         </div>
                         <div class="contact-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 5.18 2 2 0 0 1 5.11 3h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L9.09 10.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                            <span><a href="tel:+66955903727" aria-label="Phone">Call us (095-590-3727)</a></span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 5.18 2 2 0 0 1 5.11 3h3a2 2 0 0 1 2 1.72 12.8 12.8 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.8 12.8 0 0 0 2.81.7 2 2 0 0 1 .72 1.03"/></svg>
+                            <span><a href="tel:+66955903727" data-i18n="contact-call">Call us (095-590-3727)</a></span>
                         </div>
                         <div class="contact-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                            <span>Bangkok, Thailand</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span data-i18n="contact-location">Bangkok, Thailand</span>
                         </div>
                     </div>
                 </div>
@@ -431,15 +448,15 @@
             <div class="footer-brand">
                 <div class="footer-logo-row">
                     <!-- Footer Logo -->
-                    <img src="RTCN_logo.webp" alt="RTCN Logo">
+                    <img src="RTCN_logo.webp" alt="RTCN Logo" width="40" height="40" loading="lazy" decoding="async">
                     <span>Roblox Thailand<br>Community & Network<br>(RTCN)</span>
                 </div>
             </div>
 
             <div class="footer-col">
-                <h4>Our links</h4>
+                <h4 data-i18n="footer-links">Our links</h4>
                 <div class="footer-links">
-                    <a href="#about">About Us</a>
+                    <a href="#about" data-i18n="footer-about">About Us</a>
                     <!-- <a href="https://www.robloxthailand.com/blog">Our Blog</a>
                     <a href="https://www.robloxthailand.com/events">Events</a>
                     <a href="https://www.robloxthailand.com/contact">Contact</a> -->
@@ -447,32 +464,57 @@
             </div>
 
             <div class="footer-col">
-                <h4>Our Socials</h4>
+                <h4 data-i18n="footer-socials">Our Socials</h4>
                 <div class="footer-links">
-                    <a href="https://www.facebook.com/robloxthailandcommunity">Facebook</a>
-                    <a href="https://bsky.app/profile/robloxthailand.com">Bluesky</a>
-                    <a href="https://www.linkedin.com/company/roblox-thailand-community-network">LinkedIn</a>
-                    <a href="https://www.tiktok.com/@robloxthailandcommunity">TikTok</a>
+                    <a href="https://www.facebook.com/robloxthailandcommunity" target="_blank" rel="noopener noreferrer">Facebook</a>
+                    <a href="https://bsky.app/profile/robloxthailand.com" target="_blank" rel="noopener noreferrer">Bluesky</a>
+                    <a href="https://www.linkedin.com/company/roblox-thailand-community-network" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                    <a href="https://www.tiktok.com/@robloxthailandcommunity" target="_blank" rel="noopener noreferrer">TikTok</a>
                 </div>
             </div>
 
             <div class="footer-col">
-                <h4>Our Community</h4>
+                <h4 data-i18n="footer-community">Our Community</h4>
                 <div class="footer-links">
-                    <a href="https://www.discord.com/invite/UyXRhEEZPa">Discord Server</a>
-                    <a href="https://www.roblox.com/communities/35097690">Roblox Group</a>
-                    <a href="https://www.facebook.com/groups/robloxstudiothailand">Facebook Group</a>
+                    <a href="https://www.discord.com/invite/UyXRhEEZPa" target="_blank" rel="noopener noreferrer">Discord Server</a>
+                    <a href="https://www.roblox.com/communities/35097690" target="_blank" rel="noopener noreferrer">Roblox Group</a>
+                    <a href="https://www.facebook.com/groups/robloxstudiothailand" target="_blank" rel="noopener noreferrer">Facebook Group</a>
                 </div>
             </div>
+
         </div>
 
         <div class="footer-bottom">
-            <span>&copy; <span id="year"></span> Roblox Thailand Community & Network (RTCN)</span>
-            <span>RTCN is not endorsed, sponsored, or affiliated with Roblox Corporation. Roblox and its various marks and logos are trademarks of Roblox Corporation.</span>
+            <span>&copy; <span id="year"></span> Roblox Thailand Community & Network. <span data-i18n="footer-copyright">All rights reserved.</span>  RTCN is not endorsed, sponsored, or affiliated with Roblox Corporation. Roblox and its various marks and logos are trademarks of Roblox Corporation. </span>
+            <span data-i18n="footer-org">A subsidiary of Sriwisa Group.</span>
         </div>
     </footer>
 
-    <script src="/script.js"></script>
+    <!-- Loading facebook feed -->
+    <!-- <script>
+        document.querySelectorAll(".load-facebook-feed").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const container = this.parentElement.querySelector(".facebook-feed-container");
+                container.innerHTML = `
+                <div id="fb-root"></div>
+                <script async defer crossorigin="anonymous"
+                src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0"><\/script>
+                <div class="fb-page"
+                    data-href="https://www.facebook.com/RobloxThailandCommunity"
+                    data-tabs="timeline"
+                    data-width="340"
+                    data-height="500"
+                    data-small-header="false"
+                    data-adapt-container-width="true"
+                    data-hide-cover="false"
+                    data-show-facepile="true">
+                </div>`;
+                this.remove();
+            });
+        });
+    </script> -->
+
+    <script src="/js/script.js" defer></script>
 
 </body>
 </html>
